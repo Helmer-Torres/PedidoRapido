@@ -1,96 +1,146 @@
-# 📦 Sistema de Gestión de Pedidos
+# 🌮 PedidosRapidos — Sistema de Gestión de Pedidos
 
-Aplicación web para el control y seguimiento de pedidos de negocio, desarrollada bajo metodología Scrum en dos sprints. Permite registrar pedidos, gestionar clientes, cambiar estados y exportar reportes diarios.
-
----
-
-## 👤 Equipo
-
-| Nombre | Rol |
-|---|---|
-| Helmer Jose Torres Correa | Product Owner / Scrum Master / Developer |
+Aplicación web para la gestión de pedidos, clientes y configuración de un negocio de comida (o similar). Está construida como una **SPA (Single Page Application) sin dependencias de servidor**: solo HTML, CSS y JavaScript vanilla, por lo que puede abrirse directamente en el navegador sin instalar nada.
 
 ---
 
-## 🚀 Funcionalidades
+## 🚀 Inicio rápido
 
-### Sprint 1
-- **US-01 – Registro de pedido:** Ingreso de cliente, productos, cantidades y cálculo automático del total. El pedido se guarda con fecha y estado "Pendiente".
-- **US-02 – Lista de pedidos activos:** Visualización de todos los pedidos del día con su estado, ordenables por hora o estado.
-- **US-03 – Cambio de estado:** Transición entre los estados `Pendiente → En proceso → Entregado`. No se permite revertir un pedido ya entregado.
+1. Clona o descarga el repositorio.
+2. Abre `index.html` en cualquier navegador moderno (Chrome, Firefox, Edge, Safari).
+3. ¡Listo! La aplicación carga con datos de demostración precargados.
 
-### Sprint 2
-- **US-04 – Historial de cliente:** Búsqueda por nombre con historial de pedidos anteriores, fechas y montos.
-- **US-05 – Resumen del día:** Dashboard con cantidad de pedidos entregados y total vendido, actualizado automáticamente.
-- **US-06 – Eliminar pedido:** Eliminación de pedidos pendientes con confirmación. Los pedidos entregados no se pueden eliminar.
-- **US-07 – Exportar pedidos:** Generación de archivo CSV con cliente, productos, total y estado del día seleccionado.
+> No requiere Node.js, npm, ni servidor backend. Todo se ejecuta en el navegador.
 
 ---
 
-## 🗂️ Estructura del proyecto
+## 🗂️ Estructura de archivos
 
 ```
-/lib
-  ├── types.ts          → Tipos TypeScript (Order, Client, Product, etc.)
-  ├── mock-data.ts      → Datos de ejemplo con clientes y pedidos
-  └── export-csv.ts     → Utilidad de exportación CSV
-
-/components
-  ├── layout/           → app-sidebar, header, breadcrumbs
-  ├── dashboard/        → stats-card, stats-grid
-  ├── pedidos/          → orders-table, order-filters, order-status-badge
-  └── shared/           → export-csv-button, search-input
-
-/app/(dashboard)
-  ├── layout.tsx        → Layout con sidebar compartido
-  ├── page.tsx          → Dashboard principal
-  ├── pedidos/          → Lista, nuevo y detalle de pedido
-  ├── clientes/         → Lista y detalle de cliente
-  ├── reportes/         → Visualización de datos de ventas
-  └── ajustes/          → Configuración básica
+/
+├── index.html        # Punto de entrada principal y estructura del layout
+├── css/
+│   └── styles.css    # Estilos globales y variables de tema
+└── js/
+    └── app.js        # Toda la lógica de la aplicación
 ```
 
 ---
 
-## 🛠️ Herramientas de IA utilizadas
+## 🧭 Navegación
 
-| Herramienta | Uso en el proyecto |
-|---|---|
-| **ChatGPT** | Definición de criterios de aceptación del backlog y refinamiento de historias de usuario |
-| **Claude** | Resumen de sprint, actas de reunión y auditoría con Claude Code |
-| **V0** | Diseño de UI (wireframes), código de pedidos y módulo de reportes |
-| **Google Stitch** | Wireframing inicial de la interfaz |
-| **OpenCode** | Código base del sprint 2 (módulo de clientes) |
-| **GitHub Copilot (VS Code)** | Optimización y limpieza del código en el sprint 2 |
+La aplicación usa **hash routing** (`#/ruta`). Las rutas disponibles son:
 
----
-
-## 📋 Backlog
-
-| ID | Tipo | Sprint | Puntos | Prioridad |
-|---|---|---|---|---|
-| US-01 | Registro de pedido | Sprint 1 | 5 | Alta |
-| US-02 | Lista de pedidos activos | Sprint 1 | 3 | Alta |
-| US-03 | Cambio de estado | Sprint 1 | 3 | Alta |
-| US-04 | Historial de cliente | Sprint 2 | 5 | Media |
-| US-05 | Resumen del día | Sprint 2 | 3 | Media |
-| US-06 | Eliminar pedido | Sprint 2 | 2 | Baja |
-| US-07 | Exportar pedidos | Sprint 2 | 3 | Baja |
-
-**Total de puntos:** 24
+| Ruta | Página |
+|------|--------|
+| `#/` | Dashboard |
+| `#/pedidos` | Lista de pedidos |
+| `#/pedidos/nuevo` | Crear nuevo pedido |
+| `#/pedidos/:id` | Detalle de un pedido |
+| `#/clientes` | Lista de clientes |
+| `#/clientes/:id` | Detalle de un cliente |
+| `#/reportes` | Reportes *(próximamente)* |
+| `#/ajustes` | Configuración del negocio |
 
 ---
 
-## ✅ Estado del proyecto
+## 📦 Módulos de la aplicación
 
-- **Sprint 1:** ✅ Completado — Registro, listado y cambio de estado de pedidos implementados.
-- **Sprint 2:** ✅ Completado — Historial de clientes (con tier: Regular / VIP / Premium), resumen diario, eliminación y exportación CSV implementados.
+### 🏠 Dashboard
+Vista general con métricas clave del negocio:
+- Pedidos del día, total cobrado, tasa de entrega y pedidos pendientes/en proceso.
+- Tabla con las operaciones del día actual (clicables para ver el detalle).
+
+### 📋 Pedidos
+Gestión completa del ciclo de vida de los pedidos:
+- **Listado** con búsqueda por ID o nombre de cliente, filtros por estado (Todos / Pendiente / En Proceso / Entregado) y paginación de 10 en 10.
+- **Nuevo pedido**: selección de cliente, adición de productos con cantidades, notas opcionales y cálculo automático de subtotal, IVA y total.
+- **Detalle de pedido**: vista completa con posibilidad de cambiar el estado, editar o eliminar el pedido.
+- **Exportar CSV**: descarga la lista de pedidos visible como archivo `.csv`.
+
+#### Estados de un pedido
+| Estado | Descripción |
+|--------|-------------|
+| `pendiente` | Pedido recibido, aún sin procesar |
+| `en_proceso` | En preparación o camino |
+| `entregado` | Completado y entregado |
+
+### 👥 Clientes
+- **Listado** con búsqueda por nombre, email o ciudad, y filtro por nivel (Regular / Premium / VIP).
+- **Detalle de cliente**: historial de pedidos, gasto total, fecha del último pedido y datos de contacto.
+- Los datos del cliente (total gastado, número de pedidos) se **recalculan automáticamente** al crear, editar o eliminar pedidos relacionados.
+
+#### Niveles de cliente
+| Nivel | Descripción |
+|-------|-------------|
+| `regular` | Cliente estándar |
+| `premium` | Cliente frecuente |
+| `vip` | Cliente de alto valor |
+
+### 📊 Reportes
+Sección reservada para futuros análisis y gráficos detallados. Actualmente muestra un aviso de "próximamente".
+
+### ⚙️ Ajustes
+Configuración persistente del negocio:
+- Nombre del negocio, email y teléfono de contacto.
+- Tasa de IVA y opción de calcularlo automáticamente en cada pedido.
+- Preferencias de notificación (email / SMS).
 
 ---
 
-## 📝 Notas
+## 💾 Persistencia de datos
 
-- El IVA aplicado en la creación de pedidos es del **16%**.
-- El dashboard se actualiza automáticamente al cambiar de día.
-- El perfil de cliente incluye un sistema de rangos: **Regular**, **VIP** y **Premium**.
-- Se puede consultar el historial de compras de cada cliente pulsando el ícono 👁️ en la lista.
+Los datos se almacenan en el **`localStorage` del navegador** bajo las claves:
+
+| Clave | Contenido |
+|-------|-----------|
+| `om_products` | Catálogo de productos |
+| `om_clients` | Lista de clientes |
+| `om_orders` | Todos los pedidos |
+| `om_settings` | Configuración del negocio |
+| `om_theme` | Preferencia de tema (claro/oscuro) |
+
+La primera vez que se abre la aplicación, se cargan automáticamente **datos de demostración** (Taquería El Pastorcito) con 8 productos, 8 clientes y 12 pedidos de ejemplo.
+
+> ⚠️ Los datos viven en el navegador. Si borras el localStorage o usas otro navegador/perfil, los cambios no estarán disponibles.
+
+---
+
+## 🎨 Interfaz y tema
+
+- Sidebar lateral colapsable (en móvil se cierra al navegar).
+- Botón en el header para alternar entre **tema claro y oscuro**. La preferencia se guarda en localStorage.
+- Notificaciones tipo toast (éxito / error / info) que desaparecen automáticamente a los 4 segundos.
+- Modales de confirmación para acciones destructivas (eliminar pedido).
+
+---
+
+## 🛠️ Tecnologías utilizadas
+
+| Tecnología | Uso |
+|------------|-----|
+| HTML5 | Estructura de la aplicación |
+| CSS3 (variables) | Estilos y temas claro/oscuro |
+| JavaScript ES6+ | Lógica, routing y manejo de datos |
+| [Lucide Icons](https://lucide.dev) | Iconografía (cargado via CDN) |
+| localStorage | Persistencia de datos en el navegador |
+
+---
+
+## 📁 Archivos adicionales del repositorio
+
+Los siguientes archivos corresponden a una configuración **Next.js / React** que aún no está integrada en la versión HTML actual, pero forman parte del proyecto para una futura migración:
+
+- `layout.tsx`, `globals.css`, `theme-provider.tsx` — Estructura base de Next.js con Tailwind CSS y shadcn/ui.
+- `use-mobile.ts`, `use-toast.ts` — Hooks de React reutilizables.
+- `package.json`, `tsconfig.json`, `next.config.mjs`, `postcss.config.mjs` — Configuración del entorno Next.js.
+- `components.json` — Configuración de shadcn/ui (estilo New York, base neutral).
+
+---
+
+## 📌 Notas de desarrollo
+
+- Los IDs de pedidos y clientes se generan con timestamp + aleatorio: `ORD-<base36timestamp><random>`.
+- El IVA por defecto es del **16%** (configurable en Ajustes).
+- La exportación CSV incluye BOM UTF-8 para compatibilidad con Excel en español.
+- El router es client-side puro vía `window.location.hash` y el evento `hashchange`.
